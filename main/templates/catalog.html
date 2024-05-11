@@ -1,0 +1,41 @@
+{% extends  "base.html" %}
+
+{% load static %}
+
+{% block head  %}
+<link type="text/css" rel="stylesheet" href="{% static 'css/catalog.css' %}">
+{% endblock %}
+
+{% block content  %}
+
+
+<br><br>
+<div class="container">
+    <div class="brands-container">
+        {% for course in courses %}
+        <a href="/course/{{course.id}}" class="brand-container">
+
+            <img class="image brand-avatar" src="{{course.avatar.url}}" alt="Loading...">
+
+            <div class="brand-content">
+                <div class="brand-content-info">
+                    <span class="brand-title">{{course.title}}</span>
+                    <span class="brand-description">{{course.get_short_description}}</span>
+                    <br>
+                    <span class="avtor-text">Автор: {{course.author}}</span>
+                    <span class="avtor-text">Уроков: <b>15</b></span>
+                </div>
+
+                <span class="free-text">Бесплатно</span>
+            </div>
+
+        </a>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+

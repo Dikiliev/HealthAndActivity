@@ -1,0 +1,36 @@
+{% extends  "base.html" %}
+
+{% load static %}
+
+{% block head  %}
+<link type="text/css" rel="stylesheet" href="{% static 'css/course.css' %}">
+{% endblock %}
+
+{% block content  %}
+
+
+<br><br>
+<div class="container">
+  <div class="courses-container">
+    {% for lesson in lessons %}
+
+    <div class="course-container">
+      <img class="review" src="{{ lesson.get_image_url }}" alt="loading...">
+
+      <a href="/lesson/{{lesson.id}}" class="course-content">
+        <div class="course-info">
+          <span class="lesson-title">{{lesson.get_short_title}}</span>
+        </div>
+        <a href="/lesson/{{lesson.id}}" class="show-url">Смотреть</a>
+      </a>
+    </div>
+
+    {% endfor %}
+  </div>
+
+
+</div>
+
+
+{% endblock %}
+
