@@ -28,9 +28,16 @@
     <span class="lesson-description">{{lesson.description}}</span>
 
     <div class="buttons">
-      <button class="button">Предыдущее</button>
-      <button class="button">В каталог</button>
-      <button class="button">Следующее</button>
+
+        {% if previous_lesson_id %}
+            <a href="/lesson/{{ previous_lesson_id }}" class="button">Предыдущее</a>
+        {% endif %}
+
+      <a href="/catalog" class="button">В каталог</a>
+
+        {% if next_lesson_id %}
+            <a href="/lesson/{{ next_lesson_id }}" class="button">Следующее</a>
+        {% endif %}
     </div>
   </div>
 

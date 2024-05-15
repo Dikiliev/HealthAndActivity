@@ -70,5 +70,8 @@ iframe{
     width: 200px;
     border-radius: var(--base-border-radius);
 
+    text-align: center;
+    text-decoration: none;
+
     margin: auto 20px;
 }

@@ -31,9 +31,20 @@ def about_us(request: HttpRequest):
 
 def show_lesson(request: HttpRequest, lesson_id: int):
     lesson = Lesson.objects.get(id=lesson_id)
+    course = lesson.course
+
+    lessons = course.lessons.all()
+    index = list(lessons).index(lesson)
 
     data = create_base_data(f'Урок: {lesson.title}')
     data['lesson'] = lesson
+
+    if index > 0:
+        data['previous_lesson_id'] = lessons[index - 1].id
+
+    if index < len(lessons) - 1:
+        data['next_lesson_id'] = lessons[index + 1].id
+
     return render(request, 'lesson.html', data)
 
 
