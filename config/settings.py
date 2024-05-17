@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['2.59.40.101']
+ALLOWED_HOSTS = ['estechpc.ru', 'www.estechpc.ru', '2.59.40.101']
 
 AUTH_USER_MODEL = 'main.User'
 
