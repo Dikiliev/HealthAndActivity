@@ -18,5 +18,5 @@ COPY . /app/
 # Expose the port that the app runs on
 EXPOSE 8000
 
-# Run the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run the Gunicorn server
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
