@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   web:
@@ -17,8 +17,6 @@ services:
       - DJANGO_SECURE_SSL_REDIRECT=True
       - DJANGO_SESSION_COOKIE_SECURE=True
       - DJANGO_CSRF_COOKIE_SECURE=True
-    depends_on:
-      - nginx
 
   nginx:
     image: nginx:latest
@@ -27,8 +25,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./staticfiles:/app/staticfiles
-      - ./media:/app/media
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - web
