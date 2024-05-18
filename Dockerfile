@@ -1,29 +1,20 @@
-# Используем базовый образ для Python
+# Use the official Python image
 FROM python:3.9-slim
 
-# Устанавливаем зависимости
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    libssl-dev \
-    libffi-dev \
-    libjpeg-dev \
-    zlib1g-dev \
-    && apt-get clean
-
-# Устанавливаем зависимости для Python
-COPY requirements.txt /app/requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r /app/requirements.txt
-
-# Копируем проект
-COPY . /app
-
-# Устанавливаем рабочую директорию
+# Set the working directory
 WORKDIR /app
 
-# Собираем статические файлы
-RUN python manage.py collectstatic --noinput
+# Copy the requirements file
+COPY requirements.txt .
 
-# Запуск сервера Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Copy the project files
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Run the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
