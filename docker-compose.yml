@@ -3,9 +3,12 @@ version: '3.8'
 services:
   web:
     build: .
-    ports:
-      - "8000:8000"
+    command: gunicorn HealthAndActivity.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
-    environment:
-      - DEBUG=1
+      - sqlite_data:/app/db.sqlite3
+    ports:
+      - "8000:8000"
+
+volumes:
+  sqlite_data:

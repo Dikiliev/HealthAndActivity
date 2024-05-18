@@ -1,20 +1,28 @@
-# Use the official Python image
+# Используем официальный образ Python
 FROM python:3.9-slim
 
-# Set the working directory
+# Устанавливаем зависимости для Python и Django
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Copy the requirements file
-COPY requirements.txt .
+# Копируем requirements.txt и устанавливаем зависимости
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install -r requirements.txt
+# Копируем весь проект в контейнер
+COPY . /app/
 
-# Copy the project files
-COPY . .
+# Выполняем миграции и собираем статику
+RUN python manage.py migrate
+RUN python manage.py collectstatic --noinput
 
-# Expose the port the app runs on
+# Открываем порт 8000 для приложения
 EXPOSE 8000
 
-# Run the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Запускаем приложение
+CMD ["gunicorn", "HealthAndActivity.wsgi:application", "--bind", "0.0.0.0:8000"]
