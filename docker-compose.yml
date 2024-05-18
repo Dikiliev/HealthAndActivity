@@ -18,7 +18,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - ./static:/srv/HealthAndActivity/staticfiles
+      - ./static:/srv/HealthAndActivity/static
       - ./media:/srv/HealthAndActivity/media
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
