@@ -1,7 +1,9 @@
+#!/bin/bash
+
 domains=(estechpc.ru)
 rsa_key_size=4096
 data_path="./certbot"
-email="your-email@example.com" # Укажите ваш email
+email="mdikiy069@gmail.com" # Укажите ваш email
 staging=0 # Установите в 1 для тестирования
 
 if [ -d "$data_path" ]; then
