@@ -8,10 +8,13 @@ services:
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
+      - ./db.sqlite3:/app/db.sqlite3  # SQLite database file
+      - ./staticfiles:/app/staticfiles
+      - ./media:/app/media
     expose:
       - "8000"
     depends_on:
-      - db
+      - nginx
 
   nginx:
     build:
@@ -23,6 +26,8 @@ services:
     volumes:
       - .:/app
       - ./nginx:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - web
 
@@ -32,8 +37,3 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-  db:
-    image: sqlite:latest
-    volumes:
-      - ./db.sqlite3:/data/db.sqlite3
