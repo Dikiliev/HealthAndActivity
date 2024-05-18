@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 domains=(estechpc.ru)
 rsa_key_size=4096
 data_path="./certbot"
