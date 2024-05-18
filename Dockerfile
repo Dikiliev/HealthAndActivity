@@ -1,28 +1,24 @@
-# Используем официальный образ Python
+# Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-# Устанавливаем зависимости для Python и Django
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Устанавливаем рабочую директорию
+# Set the working directory
 WORKDIR /app
 
-# Копируем requirements.txt и устанавливаем зависимости
+# Copy the requirements file
 COPY requirements.txt /app/
+
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь проект в контейнер
+# Copy the rest of the application code
 COPY . /app/
 
-# Выполняем миграции и собираем статику
-RUN python manage.py migrate
-RUN python manage.py collectstatic --noinput
-
-# Открываем порт 8000 для приложения
+# Expose port 8000 for the Django app
 EXPOSE 8000
 
-# Запускаем приложение
-CMD ["gunicorn", "gunicorn.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Run the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
