@@ -10,8 +10,6 @@ services:
       - "8000"
     env_file:
       - .env
-    depends_on:
-      - nginx
 
   nginx:
     image: nginx:latest
@@ -26,6 +24,15 @@ services:
       - ./certbot/www:/var/www/certbot
     depends_on:
       - web
+
+  nginx-init:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+    command: ["sh", "-c", "while :; do sleep 6h & wait $${!}; nginx -s reload; done"]
+    depends_on:
+      - certbot
 
   certbot:
     image: certbot/certbot
