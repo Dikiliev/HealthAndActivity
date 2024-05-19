@@ -11,13 +11,25 @@ class User(AbstractUser):
 
 
 class Course(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'На рассмотрении'),
+        ('accepted', 'Принято'),
+        ('rejected', 'Отклонено'),
+    ]
+
     title = models.CharField(max_length=150, verbose_name='Название')
     description = models.TextField(blank=True, verbose_name='Описание')
     author = models.CharField(max_length=150, blank=True, verbose_name='Автор')
     avatar = models.ImageField(blank=True, verbose_name='Аватарка')
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name='Статус'
+    )
 
     def __str__(self):
-        return self.title
+        return f'{self.title} ({self.author})'
 
     def get_short_description(self):
         max_len = 80
@@ -26,6 +38,9 @@ class Course(models.Model):
             return self.description
 
         return self.description[:max_len - 3] + '...'
+
+    def get_lessons_count(self):
+        return len(self.lessons.all())
 
 
 class Lesson(models.Model):

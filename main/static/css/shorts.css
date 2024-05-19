@@ -33,6 +33,8 @@ button, .next-video{
     justify-content: center;
     align-items: flex-start;
     flex-direction: row;
+
+    gap: 1rem;
 }
 
 .right-container{

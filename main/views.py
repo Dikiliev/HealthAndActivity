@@ -18,7 +18,7 @@ def catalog(request: HttpRequest):
     data = create_base_data('Каталог')
     data['courses'] = []
 
-    courses = Course.objects.all()
+    courses = Course.objects.filter(status='accepted')
     data['courses'] = courses
 
     return render(request, 'catalog.html', data)
@@ -57,6 +57,53 @@ def show_course(request: HttpRequest, course_id: int):
 
     print(data)
     return render(request, 'course.html', data)
+
+
+def create_course(request: HttpRequest):
+    data = create_base_data()
+
+    def get():
+        return render(request, 'create_course.html', data)
+
+    def post():
+        post_data = request.POST
+        lessons = []
+
+        course_title = post_data['course_title']
+        course_description = post_data['course_description']
+        course_image = request.FILES['course_image']
+        course = Course(title=course_title, description=course_description, avatar=course_image, author=request.user)
+
+        lesson_index = 1
+        while True:
+            lesson_title = post_data.get(f'lesson_title_{lesson_index}', '')
+            lesson_description = post_data.get(f'lesson_description_{lesson_index}', '')
+
+            lesson_image = request.FILES.get(f'lesson_image_{lesson_index}', None)
+
+            if not all([lesson_title, lesson_description]):
+                break
+
+            lesson = Lesson(title=lesson_title, description=lesson_description, image=lesson_image)
+            lessons.append(lesson)
+
+            lesson_index += 1
+
+        course.save()
+        for lesson in lessons:
+            lesson.course = course
+            lesson.save()
+
+        return redirect('thanks')
+
+    if request.method == 'POST':
+        return post()
+    return get()
+
+
+def thanks(request: HttpRequest):
+    data = create_base_data()
+    return render(request, 'thanks.html', data)
 
 
 def register(request: HttpRequest):

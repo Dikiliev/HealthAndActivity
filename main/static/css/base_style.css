@@ -7,21 +7,21 @@
     --logo-font: Montserrat;
 
     --background-color-1: #ffffff;
-    --background-color-2: #EEEDED;
+    --background-color-2: #EDEDED;
     --background-header: var(--background-color-1);
 
     --color-1: #151515;
-    --color-2: #1D5B79;
+    --color-2: #190482;
     --color-3: #525FE1;
 
-    --color-hover-1: #EF6262;
-    --color-hover-2: #ec496f;
+    --color-hover-1: #7752FE;
+    --color-hover-2: #8E8FFA;
 
     --color-transparent: rgba(69, 69, 69, 0.41);
 
     --error-color: #D80032;
 
-    --light-color: rgba(248, 111, 3, 0.25);
+    --light-color: rgba(3, 7, 248, 0.25);
 
     --shadow: rgba(0, 0, 0, 0.05);
     --shadow-blur: 15px;
@@ -145,6 +145,8 @@ a{
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    gap: 1rem;
 }
 
 .enter-5{
@@ -215,8 +217,12 @@ form a:hover{
     border-radius: calc(var(--base-border-radius) / 2);
     border: none;
 
-    background-color: var(--color-2);
+    background-color: var(--color-hover-1);
     color: var(--background-color-1);
+}
+
+.button:hover{
+    background-color: var(--color-hover-2);
 }
 
 .gradient-button{
@@ -265,7 +271,7 @@ form a:hover{
     height: auto;
     object-fit: cover;
     border-radius: var(--base-border-radius);
-    margin: auto;
+    /*margin: auto;*/
 
 }
 

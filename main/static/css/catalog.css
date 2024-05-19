@@ -1,11 +1,14 @@
-.brands-container{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+.container{
+    margin: auto;
+}
 
-    width: 80%;
+.brands-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    gap: 1rem;
+
+    width: 90%;
+    max-width: 1440px;
 
     padding: 30px;
     margin: 10px auto;
@@ -27,12 +30,9 @@ b{
 .brand-container{
     display: flex;
     flex-direction: row;
+    width: 1fr;
 
-    max-width: 600px;
-    width: 600px;
-
-    margin: 10px;
-    padding: 10px;
+    padding: 0.5rem;
 
     min-height: 200px;
 
@@ -99,6 +99,7 @@ a{
     flex-direction: column;
     justify-content: space-between;
 
+    width: 100%;
     height: inherit;
 
     margin: 0 20px;

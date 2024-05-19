@@ -25,6 +25,7 @@
 {#            <a href="/about-us" class="nav-item">О нас</a>#}
 
             {% if user.is_authenticated %}
+            <a href="/create_course" class="nav-item">Создать проект</a>
             <a href="/logout" class="nav-item profile-text">{{ user.username }}</a>
 
             {% else %}
