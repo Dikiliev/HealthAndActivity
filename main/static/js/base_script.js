@@ -1,5 +1,5 @@
 // BASE_URL = 'http://localhost:8000/'
-BASE_URL = 'http://0.0.0.0:8000/'
+BASE_URL = 'http://213.171.7.167/'
 
 
 
