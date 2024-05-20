@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 
 
 class User(AbstractUser):
@@ -42,6 +44,16 @@ class Course(models.Model):
     def get_lessons_count(self):
         return len(self.lessons.all())
 
+    def get_average_rating(self):
+        average_rating = self.comments.aggregate(Avg('rating'))['rating__avg']
+        if average_rating:
+            return round(average_rating, 1)
+
+        return 0
+
+    def get_comment_count(self):
+        return self.comments.count()
+
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='урок', related_name='lessons')
@@ -63,3 +75,19 @@ class Lesson(models.Model):
             return self.title
 
         return self.title[:max_len - 3] + '...'
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', related_name='comments')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс', related_name='comments')
+    text = models.TextField(verbose_name='Текст комментария')
+    rating = models.IntegerField(
+        verbose_name='Рейтинг',
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+
+    def __str__(self):
+        return f'Комментарий {self.text} от {self.author.username} к курсу {self.course.title}'

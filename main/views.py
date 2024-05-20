@@ -2,10 +2,12 @@ import json
 import random
 
 from django.contrib.auth import login, logout, authenticate
+from django.core.serializers import serialize
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Course, Lesson
+from .models import User, Course, Lesson, Comment
 
 DEFAULT_TITLE = 'EvaTutorials'
 
@@ -54,9 +56,71 @@ def show_course(request: HttpRequest, course_id: int):
     data = create_base_data(f'Курс: {course.title}')
     data['course'] = course
     data['lessons'] = course.lessons.all()
+    # data['comments'] = course.comments.all()
 
-    print(data)
     return render(request, 'course.html', data)
+
+
+@csrf_exempt
+def add_comment(request: HttpRequest):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        text = data['comment']
+        rating = data['rating']
+        course_id = data['course_id']
+        user_id = request.user.id
+
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            return JsonResponse({"error": "Курс не найден"}, status=404)
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({"error": "Пользователь не найден"}, status=404)
+
+        existing_comment = Comment.objects.filter(course=course, author=user).first()
+
+        if existing_comment:
+            existing_comment.text = text
+            existing_comment.rating = rating
+            existing_comment.save()
+            response_message = "Комментарий обновлен"
+        else:
+            existing_comment = Comment.objects.create(course=course, author=user, text=text, rating=rating)
+            response_message = "Комментарий создан"
+
+        response_data = {
+            "message": response_message,
+            "data": data,
+            "comment": serialize('json', [existing_comment])
+        }
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({"error": "Метод запроса должен быть POST"}, status=405)
+
+
+@csrf_exempt
+def get_comments(request: HttpRequest, course_id: int):
+    data = dict()
+
+    course = Course.objects.get(id=course_id)
+    comments = course.comments.all().order_by('-updated_at')
+
+    data['comments'] = [
+        {
+            'id': comment.id,
+            'author': comment.author.username,
+            'text': comment.text,
+            'rating': comment.rating,
+            'created_at': comment.created_at.isoformat(),
+        }
+        for comment in comments
+    ]
+
+    return JsonResponse(data)
 
 
 def create_course(request: HttpRequest):

@@ -17,7 +17,7 @@
     --color-hover-1: #7752FE;
     --color-hover-2: #8E8FFA;
 
-    --color-transparent: rgba(69, 69, 69, 0.41);
+    --color-transparent: rgba(69, 69, 69, 0.6);
 
     --error-color: #D80032;
 
@@ -27,6 +27,9 @@
     --shadow-blur: 15px;
 
     --base-border-radius: 10px;
+    --small-border-radius: calc(var(--base-border-radius) / 2);
+
+    --max-width: 1440px;
 
     --base-transition: all 0.2s ease-in;
 }
@@ -301,4 +304,37 @@ form a:hover{
 
     box-shadow: 0 1px var(--shadow-blur) var(--shadow);
     border-radius: var(--base-border-radius);
+}
+
+
+
+.star-rating-display {
+    display: inline-flex;
+    font-size: 2em;
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+
+.star {
+    position: relative;
+    display: inline-block;
+    color: #ccc;
+}
+
+.star::before {
+    content: '\2605';
+    position: absolute;
+    color: #f5c518;
+    overflow: hidden;
+    width: 0;
+    white-space: nowrap;
+
+}
+
+.star.filled::before {
+    width: 100%;
+}
+
+.star.partial::before {
+    width: var(--width, 0%);
 }
