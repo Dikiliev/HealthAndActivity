@@ -13,6 +13,10 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'main.User'
