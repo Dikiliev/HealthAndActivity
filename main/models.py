@@ -20,9 +20,11 @@ class Course(models.Model):
     ]
 
     title = models.CharField(max_length=150, verbose_name='Название')
+    avatar = models.ImageField(blank=True, verbose_name='Аватарка')
+    image = models.ImageField(blank=True, verbose_name='Картинка')
     description = models.TextField(blank=True, verbose_name='Описание')
     author = models.CharField(max_length=150, blank=True, verbose_name='Автор')
-    avatar = models.ImageField(blank=True, verbose_name='Аватарка')
+
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
@@ -33,6 +35,12 @@ class Course(models.Model):
     def __str__(self):
         return f'{self.title} ({self.author})'
 
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+
+        return False
+
     def get_short_description(self):
         max_len = 80
 
@@ -41,8 +49,6 @@ class Course(models.Model):
 
         return self.description[:max_len - 3] + '...'
 
-    def get_lessons_count(self):
-        return len(self.lessons.all())
 
     def get_average_rating(self):
         average_rating = self.comments.aggregate(Avg('rating'))['rating__avg']
@@ -53,28 +59,6 @@ class Course(models.Model):
 
     def get_comment_count(self):
         return self.comments.count()
-
-
-class Lesson(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='урок', related_name='lessons')
-
-    title = models.CharField(max_length=100, verbose_name='Название')
-    description = models.TextField(blank=True, verbose_name='Описание')
-    image = models.ImageField(blank=True, verbose_name='Картина')
-
-    def __str__(self):
-        return f'{self.title} ({self.course.title})'
-
-    def get_image_url(self):
-        return self.image.url
-
-    def get_short_title(self):
-        max_len = 100
-
-        if len(str(self.title)) <= max_len:
-            return self.title
-
-        return self.title[:max_len - 3] + '...'
 
 
 class Comment(models.Model):

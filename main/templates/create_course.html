@@ -21,6 +21,7 @@
             <input type="text" id="course_title" name="course_title" value="" required>
         </div>
 
+
         <div class="input-group">
             <label for="course_image">Фото проекта:</label>
             <input type="file" id="course_image" name="course_image" accept="image/*" required>
@@ -30,19 +31,19 @@
             <textarea id="course_description" name="course_description" required></textarea>
         </div>
 
-        <div id="lessons-container">
-            <h2>Уроки</h2>
-
-        </div>
+{#        <div id="lessons-container">#}
+{#            <h2>Уроки</h2>#}
+{##}
+{#        </div>#}
         <br>
         <div class="buttons">
-            <button type="button" class="button" id="add-lesson">Добавить урок</button>
-            <button type="button" class="button" id="remove-lesson">Удалить урок</button>
+{#            <button type="button" class="button" id="add-lesson">Добавить урок</button>#}
+{#            <button type="button" class="button" id="remove-lesson">Удалить урок</button>#}
             <button type="submit" class="button">Создать проект</button>
         </div>
     </form>
 </div>
 
-<script src="{% static 'js/create_course.js' %}"></script>
+{#<script src="{% static 'js/create_course.js' %}"></script>#}
 
 {% endblock %}

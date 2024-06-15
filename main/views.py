@@ -7,7 +7,7 @@ from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Course, Lesson, Comment
+from .models import User, Course, Comment
 
 DEFAULT_TITLE = 'EvaTutorials'
 
@@ -31,34 +31,14 @@ def about_us(request: HttpRequest):
     return render(request, 'about_us.html', data)
 
 
-def show_lesson(request: HttpRequest, lesson_id: int):
-    lesson = Lesson.objects.get(id=lesson_id)
-    course = lesson.course
-
-    lessons = course.lessons.all()
-    index = list(lessons).index(lesson)
-
-    data = create_base_data(f'Урок: {lesson.title}')
-    data['lesson'] = lesson
-
-    if index > 0:
-        data['previous_lesson_id'] = lessons[index - 1].id
-
-    if index < len(lessons) - 1:
-        data['next_lesson_id'] = lessons[index + 1].id
-
-    return render(request, 'lesson.html', data)
-
-
 def show_course(request: HttpRequest, course_id: int):
     course = Course.objects.get(id=course_id)
 
-    data = create_base_data(f'Курс: {course.title}')
+    data = create_base_data()
     data['course'] = course
-    data['lessons'] = course.lessons.all()
-    # data['comments'] = course.comments.all()
 
-    return render(request, 'course.html', data)
+
+    return render(request, 'lesson.html', data)
 
 
 @csrf_exempt
@@ -136,22 +116,22 @@ def create_course(request: HttpRequest):
         course_title = post_data['course_title']
         course_description = post_data['course_description']
         course_image = request.FILES['course_image']
-        course = Course(title=course_title, description=course_description, avatar=course_image, author=request.user)
+        course = Course(title=course_title, description=course_description, avatar=course_image, image=course_image, author=request.user)
 
-        lesson_index = 1
-        while True:
-            lesson_title = post_data.get(f'lesson_title_{lesson_index}', '')
-            lesson_description = post_data.get(f'lesson_description_{lesson_index}', '')
-
-            lesson_image = request.FILES.get(f'lesson_image_{lesson_index}', None)
-
-            if not all([lesson_title, lesson_description]):
-                break
-
-            lesson = Lesson(title=lesson_title, description=lesson_description, image=lesson_image)
-            lessons.append(lesson)
-
-            lesson_index += 1
+        # lesson_index = 1
+        # while True:
+        #     lesson_title = post_data.get(f'lesson_title_{lesson_index}', '')
+        #     lesson_description = post_data.get(f'lesson_description_{lesson_index}', '')
+        #
+        #     lesson_image = request.FILES.get(f'lesson_image_{lesson_index}', None)
+        #
+        #     if not all([lesson_title, lesson_description]):
+        #         break
+        #
+        #     lesson = Lesson(title=lesson_title, description=lesson_description, image=lesson_image)
+        #     lessons.append(lesson)
+        #
+        #     lesson_index += 1
 
         course.save()
         for lesson in lessons:

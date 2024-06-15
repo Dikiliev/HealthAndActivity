@@ -3,7 +3,17 @@
 {% load static %}
 
 {% block head  %}
-<link type="text/css" rel="stylesheet" href="{% static 'css/lesson.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/course.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/lesson.css' %}">
+
+    <script>
+        const course_id = {{ course.id }};
+    </script>
+
+    <script src="{% static 'js/course.js' %}">
+
+    </script>
+
 {% endblock %}
 
 {% block content  %}
@@ -13,7 +23,7 @@
 <div class="container">
   <div class="lesson-container">
 
-    <h1 class="lesson-title">{{lesson.title}}</h1>
+    <h1 class="lesson-title">{{course.title}}</h1>
 
 {#    <div class="responsive-iframe-container">#}
 {#      <iframe#}
@@ -23,23 +33,55 @@
 {#      </iframe>#}
 {#    </div>#}
 
-      <img class="lesson-image" src="{{ lesson.get_image_url }}" alt="loading...">
+      {% if course.get_image_url %}
+      <img class="lesson-image" src="{{ course.get_image_url }}" alt="loading...">
+      {% endif %}
 
-    <span class="lesson-description">{{lesson.description}}</span>
 
-    <div class="buttons">
+    <span class="lesson-description">{{course.description}}</span>
 
-        {% if previous_lesson_id %}
-            <a href="/lesson/{{ previous_lesson_id }}" class="button">Предыдущее</a>
-        {% endif %}
-
-      <a href="/catalog" class="button">В каталог</a>
-
-        {% if next_lesson_id %}
-            <a href="/lesson/{{ next_lesson_id }}" class="button">Следующее</a>
-        {% endif %}
-    </div>
+{#    <div class="buttons">#}
+{##}
+{#        {% if previous_lesson_id %}#}
+{#            <a href="/lesson/{{ previous_lesson_id }}" class="button">Предыдущее</a>#}
+{#        {% endif %}#}
+{##}
+{#      <a href="/catalog" class="button">В каталог</a>#}
+{##}
+{#        {% if next_lesson_id %}#}
+{#            <a href="/lesson/{{ next_lesson_id }}" class="button">Следующее</a>#}
+{#        {% endif %}#}
+{#    </div>#}
   </div>
+
+<div class="strap">
+        <div class="comments-section">
+            <h2>Отзывы</h2>
+
+            <div class="comment-write">
+                <input id="comment-input" type="text" class="input">
+
+                <div id='starRating' class="star-rating">
+                    <input type="radio" id="5-stars" name="rating" value="5" />
+                    <label for="5-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars" name="rating" value="4" />
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars" name="rating" value="3" />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars" name="rating" value="2" />
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="1-star" name="rating" value="1" />
+                    <label for="1-star" class="star">&#9733;</label>
+                </div>
+
+                <button onclick="send_comment()" class="button"> Отправить </button>
+            </div>
+
+            <div id="comments" class="comments">
+
+            </div>
+        </div>
+    </div>
 
 
 </div>

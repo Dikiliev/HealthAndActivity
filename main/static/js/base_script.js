@@ -1,5 +1,10 @@
-// BASE_URL = 'http://localhost:8000/'
-BASE_URL = 'http://213.171.7.167/'
+const debug = false
+
+let BASE_URL = 'http://213.171.7.167/'
+
+if (debug){
+    BASE_URL = 'http://127.0.0.1:8000/'
+}
 
 
 
